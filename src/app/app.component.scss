@@ -1,0 +1,38 @@
+.mat-toolbar {
+  sup {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+
+  .mat-icon-button {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+}
+
+main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .mat-card {
+    margin-bottom: 2rem;
+
+    .mat-card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .mat-form-field {
+      width: 100%;
+    }
+
+    .group-button {
+      gap: 8px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+}

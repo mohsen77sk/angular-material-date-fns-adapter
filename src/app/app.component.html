@@ -1,0 +1,86 @@
+<mat-toolbar color="primary">
+  <span> ngx-material-date-fns-adapter </span>
+  <sup>
+    <small>v{{ version }}</small>
+  </sup>
+
+  <div style="flex: 1 1 auto"></div>
+
+  <a
+    mat-icon-button
+    matTooltip="Github"
+    href="https://github.com/mohsen77sk/angular-material-date-fns-adapter"
+  >
+    <img
+      src="./assets/icons/github-circle-white-transparent.svg"
+      width="24"
+      height="24"
+    />
+  </a>
+</mat-toolbar>
+
+<main>
+  <mat-card>
+    <mat-card-title>
+      <span>Multi locale sample</span>
+    </mat-card-title>
+    <mat-card-content>
+      <div [dir]="isLocale(['fa-IR', 'ar']) ? 'rtl' : 'ltr'">
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker" [value]="date" />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="group-button">
+        <button
+          mat-raised-button
+          [color]="isLocale('en-US') ? 'primary' : ''"
+          (click)="changeLocale('en-US')"
+        >
+          English Gregorian
+        </button>
+        <button
+          mat-raised-button
+          [color]="isLocale('fa-IR') ? 'primary' : ''"
+          (click)="changeLocale('fa-IR')"
+        >
+          Persian Jalali
+        </button>
+        <button
+          mat-raised-button
+          [color]="isLocale('ar') ? 'primary' : ''"
+          (click)="changeLocale('ar')"
+        >
+          Arabian Gregorian
+        </button>
+        <button
+          mat-raised-button
+          [color]="isLocale('fr') ? 'primary' : ''"
+          (click)="changeLocale('fr')"
+        >
+          French Gregorian
+        </button>
+        <button
+          mat-raised-button
+          [color]="isLocale('ja') ? 'primary' : ''"
+          (click)="changeLocale('ja')"
+        >
+          Japan Gregorian
+        </button>
+        <button
+          mat-raised-button
+          [color]="isLocale('ru') ? 'primary' : ''"
+          (click)="changeLocale('ru')"
+        >
+          Russian Gregorian
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</main>

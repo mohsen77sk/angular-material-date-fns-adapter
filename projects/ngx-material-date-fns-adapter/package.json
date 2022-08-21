@@ -1,0 +1,39 @@
+{
+  "name": "ngx-material-date-fns-adapter",
+  "version": "1.0.0",
+  "description": "date-fns adapter for Angular-Material applications. (Support jalali)",
+  "peerDependencies": {
+    "@angular/core": "^14.0.0",
+    "@angular/material": "^14.0.0",
+    "date-fns": "^2.29.0",
+    "date-fns-jalali": "^2.29.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "private": false,
+  "keywords": [
+    "Angular",
+    "Material",
+    "angular material adapter",
+    "date-fns",
+    "date-fns-jalali",
+    "Jalali datetime",
+    "jalali adapter",
+    "jalali",
+    "shamsi"
+  ],
+  "author": {
+    "name": "Mohsen Sohrabi",
+    "url": "https://github.com/mohsen77sk"
+  },
+  "homepage": "https://github.com/mohsen77sk/angular-material-date-fns-adapter#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohsen77sk/angular-material-date-fns-adapter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mohsen77sk/angular-material-date-fns-adapter/issues"
+  },
+  "license": "MIT"
+}
