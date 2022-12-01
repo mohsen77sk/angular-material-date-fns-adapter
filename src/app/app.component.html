@@ -21,11 +21,14 @@
 
 <main>
   <mat-card>
-    <mat-card-title>
-      <span>Multi locale sample</span>
-    </mat-card-title>
+    <mat-card-header>
+      <mat-card-title> Multi locale sample </mat-card-title>
+    </mat-card-header>
     <mat-card-content>
-      <div [dir]="isLocale(['fa-IR', 'ar']) ? 'rtl' : 'ltr'">
+      <div
+        style="margin-top: 1rem"
+        [dir]="isLocale(['fa-IR', 'ar']) ? 'rtl' : 'ltr'"
+      >
         <mat-form-field appearance="fill">
           <mat-label>Choose a date</mat-label>
           <input matInput [matDatepicker]="picker" [value]="date" />

@@ -15,24 +15,13 @@ main {
   margin: 0 auto;
   padding: 2rem;
 
-  .mat-card {
-    margin-bottom: 2rem;
+  .mat-mdc-form-field {
+    width: 100%;
+  }
 
-    .mat-card-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    .mat-form-field {
-      width: 100%;
-    }
-
-    .group-button {
-      gap: 8px;
-      display: flex;
-      flex-wrap: wrap;
-    }
+  .group-button {
+    gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
   }
 }
