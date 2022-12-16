@@ -53,6 +53,8 @@ export class AppComponent {
         break;
     }
     this._adapter.setLocale(this.locale);
+
+    this.changeDate(this.date);
   }
 
   /**
@@ -67,5 +69,24 @@ export class AppComponent {
     return Array.isArray(value)
       ? value.some((x) => x === locale)
       : locale === value;
+  }
+
+  /**
+   * Change datepicker
+   *
+   * @param value
+   */
+  changeDate(value: Date) {
+    const locale =
+      typeof this.locale === 'string' ? this.locale : this.locale?.code;
+
+    console.log(
+      `Change:
+      Date: ${value}
+      ISO : ${value?.toISOString()}
+      Local(${locale}): ${value.toLocaleString(locale)}`
+    );
+
+    this.date = value;
   }
 }
