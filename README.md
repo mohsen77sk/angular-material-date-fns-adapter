@@ -25,10 +25,19 @@ Both `date-fns` and `date-fns-jalali` libraries are peer dependencies, but requi
 
 ### Compatibility
 
-* `@angular/core`: >= 14.0.0
-* `@angular/material`: >= 14.0.0
-* `date-fns`: >= 2.22.0
-* `date-fns-jalali`: >= 2.22.0
+#### Current release
+
+* `@angular/core`: `>=16.0.0`
+* `@angular/material`: `>=16.0.0`
+* `date-fns`: `>=2.22.0`
+* `date-fns-jalali`: `>=2.22.0-0` || `<2.30.0-0`
+
+#### Version [`1.0.3`]
+
+* `@angular/core`: `>=14.0.0`
+* `@angular/material`: `>=14.0.0`
+* `date-fns`: `>=2.22.0`
+* `date-fns-jalali`: `>=2.22.0-0` || `<2.29.3-0`
 
 ## Usage
 

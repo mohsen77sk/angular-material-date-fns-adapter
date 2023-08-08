@@ -21,8 +21,8 @@
     "@angular/platform-browser": "^16.0.0",
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/router": "^16.0.0",
-    "date-fns": "^2.29.3",
-    "date-fns-jalali": "2.29.3-0",
+    "date-fns": "^2.30.0",
+    "date-fns-jalali": "2.30.0-0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
