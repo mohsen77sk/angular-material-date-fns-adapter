@@ -11,7 +11,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
-import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { NgxMatDateFnsModule } from 'ngx-material-date-fns-adapter';
 
 import { AppComponent } from './app.component';

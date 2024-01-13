@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "angular-material-date-fns-adapter:build:production"
+              "buildTarget": "angular-material-date-fns-adapter:build:production"
             },
             "development": {
-              "browserTarget": "angular-material-date-fns-adapter:build:development"
+              "buildTarget": "angular-material-date-fns-adapter:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-material-date-fns-adapter:build"
+            "buildTarget": "angular-material-date-fns-adapter:build"
           }
         },
         "test": {
