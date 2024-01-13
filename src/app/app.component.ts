@@ -2,7 +2,7 @@ import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import packageJson from '../../projects/ngx-material-date-fns-adapter/package.json';
 
-import { enUS, faIR, ar, fr, ja, ru } from 'date-fns/esm/locale';
+import { enUS, faIR, ar, fr, ja, ru } from 'date-fns/locale';
 
 @Component({
   selector: 'app-root',

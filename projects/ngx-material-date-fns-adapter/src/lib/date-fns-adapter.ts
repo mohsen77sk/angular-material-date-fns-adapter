@@ -4,8 +4,8 @@ import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as gregorian from 'date-fns';
 import * as jalali from 'date-fns-jalali';
 //
-import { enUS } from 'date-fns/esm/locale';
-import { faIR } from 'date-fns-jalali/esm/locale';
+import { enUS } from 'date-fns/locale';
+import { faIR } from 'date-fns-jalali/locale';
 
 /** Creates an array and fills it with values. */
 function range<T>(length: number, valueFunction: (index: number) => T): T[] {
@@ -74,7 +74,7 @@ const DAY_OF_WEEK_FORMATS = {
 };
 
 @Injectable()
-export class DateFnsAdapter extends DateAdapter<Date, Locale> {
+export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
   /** Calendar type. */
   private _calendarType: 'gregorian' | 'jalali' = 'gregorian';
 
@@ -91,7 +91,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
    *
    * @param locale The new locale
    */
-  override setLocale(locale: Locale | 'en-US' = enUS): void {
+  override setLocale(locale: gregorian.Locale | 'en-US' = enUS): void {
     if (locale === 'en-US') {
       locale = enUS;
     }
