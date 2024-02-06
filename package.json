@@ -7,7 +7,8 @@
     "test-lib": "ng test ngx-material-date-fns-adapter --watch=false --browsers=ChromeHeadless",
     "test-demo": "ng test angular-material-date-fns-adapter --watch=false --browsers=ChromeHeadless",
     "build-lib": "ng build ngx-material-date-fns-adapter && cp -v README.md dist/ngx-material-date-fns-adapter/",
-    "build-demo": "npm run build-lib && ng build --base-href /angular-material-date-fns-adapter/"
+    "build-demo": "npm run build-lib && ng build --base-href /angular-material-date-fns-adapter/",
+    "publish-win": "ng build ngx-material-date-fns-adapter && copy \"README.md\" \"dist/ngx-material-date-fns-adapter/\" && cd \"dist/ngx-material-date-fns-adapter\" && npm publish"
   },
   "private": true,
   "dependencies": {
