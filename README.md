@@ -39,34 +39,25 @@ Both `date-fns` and `date-fns-jalali` libraries are peer dependencies, but requi
 
 ## Usage
 
-1. Register the **NgxMatDateFnsModule** in your app module.
+1. Provider the **provideDateFnsAdapter** in your app.config.ts.
 
     ```typescript
-    import { NgxMatDateFnsModule }  from 'ngx-material-date-fns-adapter';
+    import { provideDateFnsAdapter } from 'ngx-material-date-fns-adapter';
 
-    @NgModule({
-      ...
-      imports: [
-        ...
-        NgxMatDateFnsModule,
-      ],
-      ...
-    })
-    export class AppModule { }
+    export const appConfig: ApplicationConfig = {
+      providers: [..., provideDateFnsAdapter()],
+    };
     ```
 
 2. Register custom locale token in providers if needed.
 
     ```typescript
     import { MAT_DATE_LOCALE } from "@angular/material/core";
-    import { fr } from 'date-fns/esm/locale';
+    import { fr } from 'date-fns/locale';
 
-    @NgModule({
-      ...
-      providers: [{ provide: MAT_DATE_LOCALE, useValue: fr }]
-      ...
-    })
-    export class AppModule { }
+    export const appConfig: ApplicationConfig = {
+      providers: [..., { provide: MAT_DATE_LOCALE, useValue: fr }],
+    };
     ```
 
 ## Change locale dynamically
@@ -76,7 +67,7 @@ Use `setLocale()` method of the DateAdapter. In case of using setLocale with a *
 ```typescript
 import { Component } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
-import { enUS, faIR } from 'date-fns/esm/locale';
+import { enUS, faIR } from 'date-fns/locale';
 
 @Component({
   selector: 'app-root',
