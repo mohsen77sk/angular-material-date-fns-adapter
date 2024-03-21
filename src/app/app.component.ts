@@ -1,10 +1,29 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import packageJson from '../../projects/ngx-material-date-fns-adapter/package.json';
 
 import { enUS, faIR, ar, fr, ja, ru } from 'date-fns/locale';
 
 @Component({
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
