@@ -261,6 +261,10 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
     if (this.locale.code == 'fa-IR' && displayFormat === 'LLL')
       displayFormat = 'LLLL';
 
+    // fix persian monthYearLabel
+    if (this.locale.code == 'fa-IR' && displayFormat === 'LLL uuuu')
+      displayFormat = 'LLLL uuuu';
+
     return dateFns[this._calendarType].format(date, displayFormat, {
       locale: this.locale,
     });
