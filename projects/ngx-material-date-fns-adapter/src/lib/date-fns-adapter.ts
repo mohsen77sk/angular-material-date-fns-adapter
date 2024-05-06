@@ -137,23 +137,23 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
       typeof Intl !== 'undefined'
         ? new Intl.DateTimeFormat(this.locale.code, {
             day: 'numeric',
-            timeZone: 'utc',
           })
         : null;
 
     return range(31, (i) => {
+      let date: Date;
+      if (this._calendarType === 'jalali') {
+        // 1402, Because Iran does not change its time after 1402 year
+        date = this.createDate(1402, 0, i + 1);
+      } else {
+        date = this.createDate(2017, 0, i + 1);
+      }
+
       if (dtf) {
-        // date-fns doesn't appear to support this functionality.
-        // Fall back to `Intl` on supported browsers.
-        let date = new Date();
-        date.setUTCFullYear(2017, 0, 1);
-        date = dateFns[this._calendarType].setMonth(date, 0);
-        date = dateFns[this._calendarType].setDate(date, i + 1);
-        date.setUTCHours(0, 0, 0, 0);
         return dtf.format(date).replace(/[\u200e\u200f]/g, '');
       }
 
-      return i + 1 + '';
+      return this.format(date, 'd');
     });
   }
 
