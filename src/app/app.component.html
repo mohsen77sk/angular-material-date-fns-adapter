@@ -46,48 +46,17 @@
       </div>
 
       <div class="group-button">
-        <button
-          mat-raised-button
-          [color]="isLocale('en-US') ? 'primary' : ''"
-          (click)="changeLocale('en-US')"
-        >
-          English Gregorian
+        @for (item of locales; track item.localeId) {
+        <!-- Check for active button -->
+        @if (isLocale(item.localeId)) {
+        <button mat-flat-button (click)="changeLocale(item.locale)">
+          {{ item.label }}
         </button>
-        <button
-          mat-raised-button
-          [color]="isLocale('fa-IR') ? 'primary' : ''"
-          (click)="changeLocale('fa-IR')"
-        >
-          Persian Jalali
+        } @else {
+        <button mat-stroked-button (click)="changeLocale(item.locale)">
+          {{ item.label }}
         </button>
-        <button
-          mat-raised-button
-          [color]="isLocale('ar') ? 'primary' : ''"
-          (click)="changeLocale('ar')"
-        >
-          Arabian Gregorian
-        </button>
-        <button
-          mat-raised-button
-          [color]="isLocale('fr') ? 'primary' : ''"
-          (click)="changeLocale('fr')"
-        >
-          French Gregorian
-        </button>
-        <button
-          mat-raised-button
-          [color]="isLocale('ja') ? 'primary' : ''"
-          (click)="changeLocale('ja')"
-        >
-          Japan Gregorian
-        </button>
-        <button
-          mat-raised-button
-          [color]="isLocale('ru') ? 'primary' : ''"
-          (click)="changeLocale('ru')"
-        >
-          Russian Gregorian
-        </button>
+        } }
       </div>
     </mat-card-content>
   </mat-card>

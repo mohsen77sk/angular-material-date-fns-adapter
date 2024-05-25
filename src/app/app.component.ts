@@ -14,6 +14,10 @@ import { enUS, faIR, ar, fr, ja, ru } from 'date-fns/locale';
 
 @Component({
   standalone: true,
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   imports: [
     MatIconModule,
     MatCardModule,
@@ -24,14 +28,43 @@ import { enUS, faIR, ar, fr, ja, ru } from 'date-fns/locale';
     MatFormFieldModule,
     MatDatepickerModule,
   ],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
   date = new Date();
   version = packageJson.version;
+
+  locales = [
+    {
+      label: 'English Gregorian',
+      locale: enUS,
+      localeId: 'en-US',
+    },
+    {
+      label: 'Persian Jalali',
+      locale: faIR,
+      localeId: 'fa-IR',
+    },
+    {
+      label: 'Arabian Gregorian',
+      locale: ar,
+      localeId: 'ar',
+    },
+    {
+      label: 'French Gregorian',
+      locale: fr,
+      localeId: 'fr',
+    },
+    {
+      label: 'Japan Gregorian',
+      locale: ja,
+      localeId: 'ja',
+    },
+    {
+      label: 'Russian Gregorian',
+      locale: ru,
+      localeId: 'ru',
+    },
+  ];
 
   /**
    * constructor
@@ -51,28 +84,9 @@ export class AppComponent {
    * @param value
    */
   changeLocale(value: any): void {
-    switch (value) {
-      case 'en-US':
-        this.locale = enUS;
-        break;
-      case 'fa-IR':
-        this.locale = faIR;
-        break;
-      case 'ar':
-        this.locale = ar;
-        break;
-      case 'fr':
-        this.locale = fr;
-        break;
-      case 'ja':
-        this.locale = ja;
-        break;
-      case 'ru':
-        this.locale = ru;
-        break;
-    }
+    this.locale = value;
     this._adapter.setLocale(this.locale);
-
+    //
     this.changeDate(this.date);
   }
 
