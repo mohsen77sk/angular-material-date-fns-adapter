@@ -2,56 +2,58 @@ name: main
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-        
+
     steps:
-    - name: Syncing repository
-      uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        cache: 'npm'
-    
-    - name: Install Dependencies
-      run: npm ci
-    
-    - name: Build Application
-      run: npm run build-demo
-    
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: dist
-        path: dist/
-  
+      - name: Syncing repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.14.0
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Application
+        run: npm run build-demo
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
   test:
     name: Test
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Syncing repository
-      uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        cache: 'npm'
-        
-    - name: Install Dependencies
-      run: npm ci
-        
-    - name: Test Lib
-      run: npm run test-lib
-    - name: Test Demo
-      run: npm run test-demo
+      - name: Syncing repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.14.0
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Test Lib
+        run: npm run test-lib
+      - name: Test Demo
+        run: npm run test-demo
 
   publish-demo:
     name: Publish demo
@@ -61,14 +63,14 @@ jobs:
       - test
 
     steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: dist
-        path: dist/
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
 
-    - name: Deploy demo
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: dist/angular-material-date-fns-adapter
+      - name: Deploy demo
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/angular-material-date-fns-adapter
