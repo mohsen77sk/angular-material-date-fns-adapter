@@ -1,4 +1,4 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 
 import * as gregorian from 'date-fns';
@@ -81,9 +81,12 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
   /**
    * constructor
    */
-  constructor(@Optional() @Inject(MAT_DATE_LOCALE) matDateLocale: any) {
+  constructor(...args: unknown[]);
+
+  constructor() {
     super();
-    this.setLocale(matDateLocale);
+    const matDateLocale = inject(MAT_DATE_LOCALE, { optional: true });
+    this.setLocale(matDateLocale as gregorian.Locale);
   }
 
   /**
