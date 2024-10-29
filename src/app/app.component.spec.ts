@@ -8,7 +8,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [provideDateFnsAdapter()],
-    }).compileComponents();
+    });
   });
 
   it('should create the app', () => {
