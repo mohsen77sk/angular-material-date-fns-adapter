@@ -23,36 +23,32 @@ npm install date-fns date-fns-jalali ngx-material-date-fns-adapter
 
 Both `date-fns` and `date-fns-jalali` libraries are peer dependencies, but required for the compilation.
 
-| Angular Version | date-fns Version | date-fns-jalali Version | ngx-material-date-fns-adapter Version
-| --------------- |----------------- | ----------------------- | -------------------------------------
-| ^18.0.0         | >=2.22.0 <4.0    | >=2.22.0-0 <=3.6.0-0    | latest
-| ^17.0.0         | >=2.22.0 <4.0    | >=2.22.0-0 <=3.6.0-0    | 17.0.3
-| ^16.0.0         | >=2.22.0 <3.0    | >=2.22.0-0 <=2.30.0-0   | 16.0.0
-| ^15.0.0         | >=2.22.0 <3.0    | >=2.22.0-0 <=2.30.0-0   | 1.0.3
-| ^14.0.0         | >=2.22.0 <3.0    | >=2.22.0-0 <=2.30.0-0   | 1.0.3
+| Angular Version | date-fns Version | date-fns-jalali Version | ngx-material-date-fns-adapter Version |
+| --------------- | ---------------- | ----------------------- | ------------------------------------- |
+| ^19.0.0         | >=2.22.0 <5.0    | >=2.22.0-0 <=5.0.0-0    | latest                                |
+| ^18.0.0         | >=2.22.0 <4.0    | >=2.22.0-0 <=3.6.0-0    | 18.0.0                                |
+| ^17.0.0         | >=2.22.0 <4.0    | >=2.22.0-0 <=3.6.0-0    | 17.0.3                                |
+| ^16.0.0         | >=2.22.0 <3.0    | >=2.22.0-0 <=2.30.0-0   | 16.0.0                                |
+| ^15.0.0         | >=2.22.0 <3.0    | >=2.22.0-0 <=2.30.0-0   | 1.0.3                                 |
+| ^14.0.0         | >=2.22.0 <3.0    | >=2.22.0-0 <=2.30.0-0   | 1.0.3                                 |
 
 ## Usage
 
-1. Provider the **provideDateFnsAdapter** in your app.config.ts.
+Provider the **provideDateFnsAdapter** and Register **locale** token in providers in your app.config.ts.
 
-    ```typescript
-    import { provideDateFnsAdapter } from 'ngx-material-date-fns-adapter';
+  ```typescript
+  import { MAT_DATE_LOCALE } from '@angular/material/core';
+  import { provideDateFnsAdapter } from 'ngx-material-date-fns-adapter';
+  import { enUS } from 'date-fns/locale';
 
-    export const appConfig: ApplicationConfig = {
-      providers: [..., provideDateFnsAdapter()],
-    };
-    ```
-
-2. Register custom locale token in providers if needed.
-
-    ```typescript
-    import { MAT_DATE_LOCALE } from "@angular/material/core";
-    import { fr } from 'date-fns/locale';
-
-    export const appConfig: ApplicationConfig = {
-      providers: [..., { provide: MAT_DATE_LOCALE, useValue: fr }],
-    };
-    ```
+  export const appConfig: ApplicationConfig = {
+    providers: [
+      ...,
+      provideDateFnsAdapter(),
+      { provide: MAT_DATE_LOCALE, useValue: enUS }
+    ],
+  };
+  ```
 
 ## Change locale dynamically
 
@@ -85,9 +81,9 @@ export class AppComponent {
 }
 ```
 
-## Default locale
+## Supported locales
 
-When MAT_DATE_LOCALE tokens are not provided, `en-US` locale is used by default.
+[See project for details](https://github.com/date-fns/date-fns/tree/main/src/locale)
 
 ## Development
 

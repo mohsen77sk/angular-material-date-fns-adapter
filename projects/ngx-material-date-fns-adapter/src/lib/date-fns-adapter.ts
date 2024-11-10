@@ -4,6 +4,7 @@ import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as gregorian from 'date-fns';
 import * as jalali from 'date-fns-jalali';
 //
+import { Locale } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { faIR } from 'date-fns-jalali/locale';
 
@@ -24,14 +25,17 @@ const dateFns = {
     getYear: gregorian.getYear,
     getDate: gregorian.getDate,
     getDay: gregorian.getDay,
+    getHours: gregorian.getHours,
+    getMinutes: gregorian.getMinutes,
+    getSeconds: gregorian.getSeconds,
     getDaysInMonth: gregorian.getDaysInMonth,
     formatISO: gregorian.formatISO,
     addYears: gregorian.addYears,
     addMonths: gregorian.addMonths,
     addDays: gregorian.addDays,
+    addSeconds: gregorian.addSeconds,
     isValid: gregorian.isValid,
     isDate: gregorian.isDate,
-    toDate: gregorian.toDate,
     format: gregorian.format,
     parseISO: gregorian.parseISO,
     parse: gregorian.parse,
@@ -44,14 +48,17 @@ const dateFns = {
     getYear: jalali.getYear,
     getDate: jalali.getDate,
     getDay: jalali.getDay,
+    getHours: jalali.getHours,
+    getMinutes: jalali.getMinutes,
+    getSeconds: jalali.getSeconds,
     getDaysInMonth: jalali.getDaysInMonth,
     formatISO: jalali.formatISO,
     addYears: jalali.addYears,
     addMonths: jalali.addMonths,
     addDays: jalali.addDays,
+    addSeconds: jalali.addSeconds,
     isValid: jalali.isValid,
     isDate: jalali.isDate,
-    toDate: jalali.toDate,
     format: jalali.format,
     parseISO: jalali.parseISO,
     parse: jalali.parse,
@@ -74,7 +81,7 @@ const DAY_OF_WEEK_FORMATS = {
 };
 
 @Injectable()
-export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
+export class DateFnsAdapter extends DateAdapter<Date, Locale> {
   /** Calendar type. */
   private _calendarType: 'gregorian' | 'jalali' = 'gregorian';
 
@@ -86,7 +93,7 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
   constructor() {
     super();
     const matDateLocale = inject(MAT_DATE_LOCALE, { optional: true });
-    this.setLocale(matDateLocale as gregorian.Locale);
+    this.setLocale(matDateLocale as Locale);
   }
 
   /**
@@ -94,11 +101,7 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
    *
    * @param locale The new locale
    */
-  override setLocale(locale: gregorian.Locale | 'en-US' = enUS): void {
-    if (locale === 'en-US') {
-      locale = enUS;
-    }
-
+  override setLocale(locale: Locale = enUS): void {
     if (locale.code === 'fa-IR') {
       locale = faIR;
       this._calendarType = 'jalali';
@@ -127,12 +130,7 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
 
   getMonthNames(style: 'long' | 'short' | 'narrow'): string[] {
     const pattern = MONTH_FORMATS[style];
-    return range(12, (i) =>
-      this.format(
-        dateFns[this._calendarType].setMonth(this.today(), i),
-        pattern
-      )
-    );
+    return range(12, (i) => this.format(dateFns[this._calendarType].setMonth(this.today(), i), pattern));
   }
 
   getDateNames(): string[] {
@@ -144,13 +142,7 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
         : null;
 
     return range(31, (i) => {
-      let date: Date;
-      if (this._calendarType === 'jalali') {
-        // 1402, Because Iran does not change its time after 1402 year
-        date = this.createDate(1402, 0, i + 1);
-      } else {
-        date = this.createDate(2017, 0, i + 1);
-      }
+      let date = this.createDate(2017, 0, i + 1);
 
       if (dtf) {
         return dtf.format(date).replace(/[\u200e\u200f]/g, '');
@@ -178,16 +170,14 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
   }
 
   clone(date: Date): Date {
-    return dateFns[this._calendarType].toDate(date);
+    return new Date(date.getTime());
   }
 
   createDate(year: number, month: number, date: number): Date {
     // Check for invalid month and date (except upper bound on date which we have to check after
     // creating the Date).
     if (month < 0 || month > 11) {
-      throw Error(
-        `Invalid month index "${month}". Month index has to be between 0 and 11.`
-      );
+      throw Error(`Invalid month index "${month}". Month index has to be between 0 and 11.`);
     }
 
     if (date < 1) {
@@ -231,14 +221,9 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
       }
 
       for (const currentFormat of formats) {
-        const fromFormat = dateFns[this._calendarType].parse(
-          value,
-          currentFormat,
-          new Date(),
-          {
-            locale: this.locale,
-          }
-        );
+        const fromFormat = dateFns[this._calendarType].parse(value, currentFormat, new Date(), {
+          locale: this.locale,
+        });
 
         if (this.isValid(fromFormat)) {
           return fromFormat;
@@ -261,12 +246,10 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
     }
 
     // fix persian Month short name
-    if (this.locale.code == 'fa-IR' && displayFormat === 'LLL')
-      displayFormat = 'LLLL';
+    if (this.locale.code == 'fa-IR' && displayFormat === 'LLL') displayFormat = 'LLLL';
 
     // fix persian monthYearLabel
-    if (this.locale.code == 'fa-IR' && displayFormat === 'LLL uuuu')
-      displayFormat = 'LLLL uuuu';
+    if (this.locale.code == 'fa-IR' && displayFormat === 'LLL uuuu') displayFormat = 'LLLL uuuu';
 
     return dateFns[this._calendarType].format(date, displayFormat, {
       locale: this.locale,
@@ -319,5 +302,44 @@ export class DateFnsAdapter extends DateAdapter<Date, gregorian.Locale> {
 
   invalid(): Date {
     return new Date(NaN);
+  }
+
+  override setTime(target: Date, hours: number, minutes: number, seconds: number): Date {
+    if (hours < 0 || hours > 23) {
+      throw Error(`Invalid hours "${hours}". Hours value must be between 0 and 23.`);
+    }
+    if (minutes < 0 || minutes > 59) {
+      throw Error(`Invalid minutes "${minutes}". Minutes value must be between 0 and 59.`);
+    }
+    if (seconds < 0 || seconds > 59) {
+      throw Error(`Invalid seconds "${seconds}". Seconds value must be between 0 and 59.`);
+    }
+
+    return dateFns[this._calendarType].set(this.clone(target), {
+      hours,
+      minutes,
+      seconds,
+      milliseconds: 0,
+    });
+  }
+
+  override getHours(date: Date): number {
+    return dateFns[this._calendarType].getHours(date);
+  }
+
+  override getMinutes(date: Date): number {
+    return dateFns[this._calendarType].getMinutes(date);
+  }
+
+  override getSeconds(date: Date): number {
+    return dateFns[this._calendarType].getSeconds(date);
+  }
+
+  override parseTime(value: any, parseFormat: string | string[]): Date | null {
+    return this.parse(value, parseFormat);
+  }
+
+  override addSeconds(date: Date, amount: number): Date {
+    return dateFns[this._calendarType].addSeconds(date, amount);
   }
 }

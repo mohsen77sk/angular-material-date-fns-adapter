@@ -15,13 +15,15 @@ main {
   margin: 0 auto;
   padding: 2rem;
 
-  .mat-mdc-form-field {
-    width: 100%;
+  .group-form-field {
+    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .group-button {
     gap: 8px;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

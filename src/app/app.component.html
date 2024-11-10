@@ -6,16 +6,8 @@
 
   <div style="flex: 1 1 auto"></div>
 
-  <a
-    mat-icon-button
-    matTooltip="Github"
-    href="https://github.com/mohsen77sk/angular-material-date-fns-adapter"
-  >
-    <img
-      src="./assets/icons/github-circle-black-transparent.svg"
-      width="24"
-      height="24"
-    />
+  <a mat-icon-button matTooltip="Github" href="https://github.com/mohsen77sk/angular-material-date-fns-adapter">
+    <img src="./assets/icons/github-circle-black-transparent.svg" width="24" height="24" />
   </a>
 </mat-toolbar>
 
@@ -25,25 +17,21 @@
       <mat-card-title> Multi locale sample </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div
-        style="margin-top: 1rem"
-        [dir]="isLocale(['fa-IR', 'ar']) ? 'rtl' : 'ltr'"
-      >
-        <mat-form-field appearance="fill">
-          <mat-label>Choose a date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            [value]="date"
-            (dateChange)="changeDate($event.value)"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+      <p class="group-form-field" [dir]="isLocale(['fa-IR', 'ar']) ? 'rtl' : 'ltr'">
+        <mat-form-field>
+          <mat-label>{{ getDateLabel() }}</mat-label>
+          <input matInput [matDatepicker]="datepicker" [value]="date" (dateChange)="changeDate($event.value)" />
+          <mat-datepicker #datepicker />
+          <mat-datepicker-toggle [for]="datepicker" matSuffix />
         </mat-form-field>
-      </div>
+
+        <mat-form-field>
+          <mat-label>{{ getTimeLabel() }}</mat-label>
+          <input matInput [matTimepicker]="timepicker" [value]="date" (valueChange)="changeDate($event)" />
+          <mat-timepicker #timepicker />
+          <mat-timepicker-toggle [for]="timepicker" matSuffix />
+        </mat-form-field>
+      </p>
 
       <div class="group-button">
         @for (item of locales; track item.localeId) {

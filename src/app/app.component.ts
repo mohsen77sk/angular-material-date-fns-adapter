@@ -8,12 +8,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 import packageJson from '../../projects/ngx-material-date-fns-adapter/package.json';
 
-import { enUS, faIR, ar, fr, ja, ru } from 'date-fns/locale';
+import { enUS, faIR, ar, fr, ja, ru, Locale } from 'date-fns/locale';
 
 @Component({
-  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -27,6 +27,7 @@ import { enUS, faIR, ar, fr, ja, ru } from 'date-fns/locale';
     MatToolbarModule,
     MatFormFieldModule,
     MatDatepickerModule,
+    MatTimepickerModule,
   ],
 })
 export class AppComponent {
@@ -38,41 +39,50 @@ export class AppComponent {
       label: 'English Gregorian',
       locale: enUS,
       localeId: 'en-US',
+      dateLabel: 'Choose a date',
+      timeLabel: 'Choose a time',
     },
     {
       label: 'Persian Jalali',
       locale: faIR,
       localeId: 'fa-IR',
+      dateLabel: 'انتخاب تاریخ',
+      timeLabel: 'انتخاب ساعت',
     },
     {
       label: 'Arabian Gregorian',
       locale: ar,
       localeId: 'ar',
+      dateLabel: 'اختر تاريخًا',
+      timeLabel: 'اختر وقتًا',
     },
     {
       label: 'French Gregorian',
       locale: fr,
       localeId: 'fr',
+      dateLabel: 'Choisissez une date',
+      timeLabel: 'Choisissez une heure',
     },
     {
       label: 'Japan Gregorian',
       locale: ja,
       localeId: 'ja',
+      dateLabel: '日付を選択',
+      timeLabel: '時間を選択',
     },
     {
       label: 'Russian Gregorian',
       locale: ru,
       localeId: 'ru',
+      dateLabel: 'Выберите дату',
+      timeLabel: 'Выберите время',
     },
   ];
 
   /**
    * constructor
    */
-  constructor(
-    private _adapter: DateAdapter<any>,
-    @Inject(MAT_DATE_LOCALE) public locale: any
-  ) {}
+  constructor(private _adapter: DateAdapter<any>, @Inject(MAT_DATE_LOCALE) public locale: Locale) {}
 
   // -----------------------------------------------------------------------------------------------------
   // @ Public methods
@@ -96,12 +106,21 @@ export class AppComponent {
    * @param value
    */
   isLocale(value: string | string[]): boolean {
-    const locale =
-      typeof this.locale === 'string' ? this.locale : this.locale?.code;
+    return Array.isArray(value) ? value.some((x) => x === this.locale.code) : this.locale.code === value;
+  }
 
-    return Array.isArray(value)
-      ? value.some((x) => x === locale)
-      : locale === value;
+  /**
+   * Get current locale date label
+   */
+  getDateLabel(): string {
+    return this.locales.find((x) => x.localeId === this.locale.code)?.dateLabel ?? '';
+  }
+
+  /**
+   * Get current locale time label
+   */
+  getTimeLabel(): string {
+    return this.locales.find((x) => x.localeId === this.locale.code)?.timeLabel ?? '';
   }
 
   /**
@@ -110,14 +129,11 @@ export class AppComponent {
    * @param value
    */
   changeDate(value: Date) {
-    const locale =
-      typeof this.locale === 'string' ? this.locale : this.locale?.code;
-
     console.log(
       `Change:
       Date: ${value}
       ISO : ${value?.toISOString()}
-      Local(${locale}): ${value.toLocaleString(locale)}`
+      Local(${this.locale.code}): ${value.toLocaleString(this.locale.code)}`
     );
 
     this.date = value;
