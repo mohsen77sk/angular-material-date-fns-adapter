@@ -1,6 +1,6 @@
 {
   "name": "ngx-material-date-fns-adapter",
-  "version": "18.0.0",
+  "version": "19.0.0",
   "description": "date-fns adapter for Angular-Material applications. (Support jalali)",
   "peerDependencies": {
     "@angular/core": "^19.0.0 || ^20.0.0",
