@@ -241,7 +241,7 @@ describe('DateFnsAdapter', () => {
   });
 
   it('should parse a 24-hour time string', () => {
-    const result = adapter.parseTime('14:52', 'p')!;
+    const result = adapter.parseTime('14:52', 'HH:mm')!;
     expect(result).toBeTruthy();
     expect(adapter.isValid(result)).toBe(true);
     expect(adapter.getHours(result)).toBe(14);
@@ -250,7 +250,7 @@ describe('DateFnsAdapter', () => {
   });
 
   it('should parse a 12-hour time string', () => {
-    const result = adapter.parseTime('2:52 PM', 'p')!;
+    const result = adapter.parseTime('2:52 PM', 'hh:mm a')!;
     expect(result).toBeTruthy();
     expect(adapter.isValid(result)).toBe(true);
     expect(adapter.getHours(result)).toBe(14);
@@ -258,7 +258,16 @@ describe('DateFnsAdapter', () => {
     expect(adapter.getSeconds(result)).toBe(0);
   });
 
-  it('should parse a padded time string', () => {
+  it('should parse a localized time string', () => {
+    const result = adapter.parseTime('03:04 AM', 'p')!;
+    expect(result).toBeTruthy();
+    expect(adapter.isValid(result)).toBe(true);
+    expect(adapter.getHours(result)).toBe(3);
+    expect(adapter.getMinutes(result)).toBe(4);
+    expect(adapter.getSeconds(result)).toBe(0);
+  });
+
+  it('should parse a Long localized time string', () => {
     const result = adapter.parseTime('03:04:05 AM', 'pp')!;
     expect(result).toBeTruthy();
     expect(adapter.isValid(result)).toBe(true);
