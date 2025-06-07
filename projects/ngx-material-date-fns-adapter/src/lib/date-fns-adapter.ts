@@ -206,7 +206,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
     return new Date();
   }
 
-  parse(value: any, parseFormat: string | string[]): Date | null {
+  parse(value: unknown, parseFormat: string | string[]): Date | null {
     if (typeof value == 'string' && value.length > 0) {
       const iso8601Date = dateFns[this._calendarType].parseISO(value);
 
@@ -279,7 +279,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
    * (https://www.ietf.org/rfc/rfc3339.txt) into valid Dates and empty string into null. Returns an
    * invalid date for all other values.
    */
-  override deserialize(value: any): Date | null {
+  override deserialize(value: unknown): Date | null {
     if (typeof value === 'string') {
       if (!value) {
         return null;
@@ -292,7 +292,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
     return super.deserialize(value);
   }
 
-  isDateInstance(obj: any): boolean {
+  isDateInstance(obj: unknown): obj is Date {
     return dateFns[this._calendarType].isDate(obj);
   }
 
@@ -335,7 +335,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
     return dateFns[this._calendarType].getSeconds(date);
   }
 
-  override parseTime(value: any, parseFormat: string | string[]): Date | null {
+  override parseTime(value: unknown, parseFormat: string | string[]): Date | null {
     return this.parse(value, parseFormat);
   }
 
