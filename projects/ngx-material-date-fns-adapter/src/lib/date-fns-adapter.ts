@@ -17,7 +17,33 @@ function range<T>(length: number, valueFunction: (index: number) => T): T[] {
   return valuesArray;
 }
 
-const dateFns = {
+type CalendarType = 'gregorian' | 'jalali';
+
+type DateFnsSubset = {
+  setMonth: typeof gregorian.setMonth;
+  setDate: typeof gregorian.setDate;
+  getMonth: typeof gregorian.getMonth;
+  getYear: typeof gregorian.getYear;
+  getDate: typeof gregorian.getDate;
+  getDay: typeof gregorian.getDay;
+  getHours: typeof gregorian.getHours;
+  getMinutes: typeof gregorian.getMinutes;
+  getSeconds: typeof gregorian.getSeconds;
+  getDaysInMonth: typeof gregorian.getDaysInMonth;
+  formatISO: typeof gregorian.formatISO;
+  addYears: typeof gregorian.addYears;
+  addMonths: typeof gregorian.addMonths;
+  addDays: typeof gregorian.addDays;
+  addSeconds: typeof gregorian.addSeconds;
+  isValid: typeof gregorian.isValid;
+  isDate: typeof gregorian.isDate;
+  format: typeof gregorian.format;
+  parseISO: typeof gregorian.parseISO;
+  parse: typeof gregorian.parse;
+  set: typeof gregorian.set;
+};
+
+const dateFns: Record<CalendarType, DateFnsSubset> = {
   gregorian: {
     setMonth: gregorian.setMonth,
     setDate: gregorian.setDate,
@@ -83,7 +109,11 @@ const DAY_OF_WEEK_FORMATS = {
 @Injectable()
 export class DateFnsAdapter extends DateAdapter<Date, Locale> {
   /** Calendar type. */
-  private _calendarType: 'gregorian' | 'jalali' = 'gregorian';
+  private _calendarType: CalendarType = 'gregorian';
+
+  private get activeDateFns() {
+    return dateFns[this._calendarType];
+  }
 
   /**
    * constructor
@@ -113,36 +143,31 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
   }
 
   getYear(date: Date): number {
-    return dateFns[this._calendarType].getYear(date);
+    return this.activeDateFns.getYear(date);
   }
 
   getMonth(date: Date): number {
-    return dateFns[this._calendarType].getMonth(date);
+    return this.activeDateFns.getMonth(date);
   }
 
   getDate(date: Date): number {
-    return dateFns[this._calendarType].getDate(date);
+    return this.activeDateFns.getDate(date);
   }
 
   getDayOfWeek(date: Date): number {
-    return dateFns[this._calendarType].getDay(date);
+    return this.activeDateFns.getDay(date);
   }
 
   getMonthNames(style: 'long' | 'short' | 'narrow'): string[] {
     const pattern = MONTH_FORMATS[style];
-    return range(12, (i) => this.format(dateFns[this._calendarType].setMonth(this.today(), i), pattern));
+    return range(12, (i) => this.format(this.activeDateFns.setMonth(this.today(), i), pattern));
   }
 
   getDateNames(): string[] {
-    const dtf =
-      typeof Intl !== 'undefined'
-        ? new Intl.DateTimeFormat(this.locale.code, {
-            day: 'numeric',
-          })
-        : null;
+    const dtf = typeof Intl !== 'undefined' ? new Intl.DateTimeFormat(this.locale.code, { day: 'numeric' }) : null;
 
     return range(31, (i) => {
-      let date = this.createDate(2017, 0, i + 1);
+      const date = this.createDate(2017, 0, i + 1);
 
       if (dtf) {
         return dtf.format(date).replace(/[\u200e\u200f]/g, '');
@@ -166,7 +191,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
   }
 
   getNumDaysInMonth(date: Date): number {
-    return dateFns[this._calendarType].getDaysInMonth(date);
+    return this.activeDateFns.getDaysInMonth(date);
   }
 
   clone(date: Date): Date {
@@ -184,7 +209,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
       throw Error(`Invalid date "${date}". Date has to be greater than 0.`);
     }
 
-    const result = dateFns[this._calendarType].set(new Date(), {
+    const result = this.activeDateFns.set(new Date(), {
       year,
       month,
       date,
@@ -195,7 +220,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
     });
 
     // Check that the date wasn't above the upper bound for the month, causing the month to overflow
-    if (this.getMonth(result) != month) {
+    if (this.getMonth(result) !== month) {
       throw Error(`Invalid date "${date}" for month with index "${month}".`);
     }
 
@@ -207,8 +232,8 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
   }
 
   parse(value: unknown, parseFormat: string | string[]): Date | null {
-    if (typeof value == 'string' && value.length > 0) {
-      const iso8601Date = dateFns[this._calendarType].parseISO(value);
+    if (typeof value === 'string' && value.length > 0) {
+      const iso8601Date = this.activeDateFns.parseISO(value);
 
       if (this.isValid(iso8601Date)) {
         return iso8601Date;
@@ -216,12 +241,12 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
 
       const formats = Array.isArray(parseFormat) ? parseFormat : [parseFormat];
 
-      if (!parseFormat.length) {
+      if (!formats.length) {
         throw Error('Formats array must not be empty.');
       }
 
       for (const currentFormat of formats) {
-        const fromFormat = dateFns[this._calendarType].parse(value, currentFormat, new Date(), {
+        const fromFormat = this.activeDateFns.parse(value, currentFormat, new Date(), {
           locale: this.locale,
         });
 
@@ -246,30 +271,34 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
     }
 
     // fix persian Month short name
-    if (this.locale.code == 'fa-IR' && displayFormat === 'LLL') displayFormat = 'LLLL';
+    if (this.locale.code === 'fa-IR' && displayFormat === 'LLL') {
+      displayFormat = 'LLLL';
+    }
 
     // fix persian monthYearLabel
-    if (this.locale.code == 'fa-IR' && displayFormat === 'LLL uuuu') displayFormat = 'LLLL uuuu';
+    if (this.locale.code === 'fa-IR' && displayFormat === 'LLL uuuu') {
+      displayFormat = 'LLLL uuuu';
+    }
 
-    return dateFns[this._calendarType].format(date, displayFormat, {
+    return this.activeDateFns.format(date, displayFormat, {
       locale: this.locale,
     });
   }
 
   addCalendarYears(date: Date, years: number): Date {
-    return dateFns[this._calendarType].addYears(date, years);
+    return this.activeDateFns.addYears(date, years);
   }
 
   addCalendarMonths(date: Date, months: number): Date {
-    return dateFns[this._calendarType].addMonths(date, months);
+    return this.activeDateFns.addMonths(date, months);
   }
 
   addCalendarDays(date: Date, days: number): Date {
-    return dateFns[this._calendarType].addDays(date, days);
+    return this.activeDateFns.addDays(date, days);
   }
 
   toIso8601(date: Date): string {
-    return dateFns[this._calendarType].formatISO(date, {
+    return this.activeDateFns.formatISO(date, {
       representation: 'date',
     });
   }
@@ -284,7 +313,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
       if (!value) {
         return null;
       }
-      const date = dateFns[this._calendarType].parseISO(value);
+      const date = this.activeDateFns.parseISO(value);
       if (this.isValid(date)) {
         return date;
       }
@@ -293,11 +322,11 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
   }
 
   isDateInstance(obj: unknown): obj is Date {
-    return dateFns[this._calendarType].isDate(obj);
+    return this.activeDateFns.isDate(obj);
   }
 
   isValid(date: Date): boolean {
-    return dateFns[this._calendarType].isValid(date);
+    return this.activeDateFns.isValid(date);
   }
 
   invalid(): Date {
@@ -315,7 +344,7 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
       throw Error(`Invalid seconds "${seconds}". Seconds value must be between 0 and 59.`);
     }
 
-    return dateFns[this._calendarType].set(this.clone(target), {
+    return this.activeDateFns.set(this.clone(target), {
       hours,
       minutes,
       seconds,
@@ -324,15 +353,15 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
   }
 
   override getHours(date: Date): number {
-    return dateFns[this._calendarType].getHours(date);
+    return this.activeDateFns.getHours(date);
   }
 
   override getMinutes(date: Date): number {
-    return dateFns[this._calendarType].getMinutes(date);
+    return this.activeDateFns.getMinutes(date);
   }
 
   override getSeconds(date: Date): number {
-    return dateFns[this._calendarType].getSeconds(date);
+    return this.activeDateFns.getSeconds(date);
   }
 
   override parseTime(value: unknown, parseFormat: string | string[]): Date | null {
@@ -340,6 +369,6 @@ export class DateFnsAdapter extends DateAdapter<Date, Locale> {
   }
 
   override addSeconds(date: Date, amount: number): Date {
-    return dateFns[this._calendarType].addSeconds(date, amount);
+    return this.activeDateFns.addSeconds(date, amount);
   }
 }
