@@ -2,7 +2,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -14,12 +13,9 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "paths": {
-      "ngx-material-date-fns-adapter": [
-        "projects/ngx-material-date-fns-adapter/src/public-api"
-      ],
-      "ngx-material-date-fns-adapter/*": [
-        "dist/ngx-material-date-fns-adapter/*"
-      ]
+      "@app/*": ["./src/app/*"],
+      "ngx-material-date-fns-adapter": ["./projects/ngx-material-date-fns-adapter/src/public-api"],
+      "ngx-material-date-fns-adapter/*": ["./dist/ngx-material-date-fns-adapter/*"]
     },
     "declaration": false,
     "experimentalDecorators": true,
